@@ -1,14 +1,42 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
-    <script type="module" crossorigin src="/assets/index-h05sbxDU.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-Ca74PG3G.css">
+    <title>CV - {{ cv.name }}</title>
   </head>
   <body>
-    <div id="root"></div>
+    <h1>{{ cv.name }}</h1>
+    <h2>{{ cv.title }}</h2>
+    <p>{{ cv.summary }}</p>
+
+    <h3>Strengths</h3>
+    <ul>
+      {% for strength in cv.strengths %}
+        <li>{{ strength }}</li>
+      {% endfor %}
+    </ul>
+
+    <h3>Professional Experience</h3>
+    {% for job in cv.experience %}
+      <h4>{{ job.role }} at {{ job.company }} ({{ job.duration }})</h4>
+      <ul>
+        {% for highlight in job.highlights %}
+          <li>{{ highlight }}</li>
+        {% endfor %}
+      </ul>
+    {% endfor %}
+
+    <h3>Education</h3>
+    <ul>
+      {% for edu in cv.education %}
+        <li>{{ edu.degree }} from {{ edu.institution }} ({{ edu.period }})</li>
+      {% endfor %}
+    </ul>
+
+    <h3>Contact</h3>
+    <ul>
+      <li>Phone: {{ cv.contact.phone }}</li>
+      <li>Email: {{ cv.contact.email }}</li>
+      <li>Location: {{ cv.contact.location }}</li>
+    </ul>
   </body>
 </html>
