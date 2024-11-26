@@ -31,8 +31,8 @@ jobs:
                     ${{ runner.os }}-
 
            - name: Install dependencies
-             if: steps.npm_cache_id.outputs.cache-hit != true
-             run: npm install 
+             if: steps.npm_cache_id.outputs.cache-hit != 'true'
+             run: npm ci 
 
      
            - name: Code Analysis
