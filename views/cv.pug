@@ -1,0 +1,27 @@
+doctype html
+html
+  head
+    title CV - #{cv.name}
+  body
+    h1 #{cv.name}
+    h2 #{cv.title}
+    p #{cv.summary}
+    h3 Strengths
+    ul
+      each strength in cv.strengths
+        li= strength
+    h3 Professional Experience
+    each job in cv.experience
+      h4 #{job.role} at #{job.company} (#{job.duration})
+      ul
+        each highlight in job.highlights
+          li= highlight
+    h3 Education
+    ul
+      each edu in cv.education
+        li #{edu.degree} from #{edu.institution} (#{edu.period})
+    h3 Contact
+    ul
+      li Phone: #{cv.contact.phone}
+      li Email: #{cv.contact.email}
+      li Location: #{cv.contact.location}
