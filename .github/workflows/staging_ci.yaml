@@ -86,7 +86,7 @@ jobs:
              env: 
                 IMAGE_VERSION: ${{steps.date.outputs.builddate}}
              run : |
-                  docker build -f Dockerfile -t sham-Devops:$IMAGE_VERSION
+                  docker build -f Dockerfile -t sham-Devops:$IMAGE_VERSION .
 
 
            - name: Push to Docker Hub Repository
