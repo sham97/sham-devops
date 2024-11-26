@@ -39,6 +39,9 @@ jobs:
         run: npm install
       - name: Build Project
         run: npm run build
+
+      - name: Copy app.js
+        run: cp ./app.js ./dist/
       - name: Upload artifact to enable deployment
         uses: actions/upload-artifact@v3
         with:
@@ -52,7 +55,7 @@ jobs:
     needs: build
     # Specify runner + deployment step
     runs-on: ubuntu-latest
-    steps:
+    steps:    
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
