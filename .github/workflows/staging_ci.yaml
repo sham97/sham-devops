@@ -58,5 +58,9 @@ jobs:
                 output=$( grep -iE "vulnerabilities" ./out_2.txt )
                 echo "vulnerabilities=$(echo $output)" >> $GITHUB_OUTPUT
                 exit $exitCode
+
+           - name: Output Vulnerability Results
+             run: |
+                  echo "Linting Errors: ${{ steps.dependency-vulnerability.outputs }}"
         
        
