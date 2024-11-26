@@ -1,0 +1,64 @@
+name: staging ci pipeline
+
+on: 
+    push:
+        branches:
+            - main
+
+jobs: 
+    build:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                version: [18.16.0]
+                os: [ubuntu-latest, windows-latest]
+
+        steps:
+           - name: Checkout Code
+             uses: actions/checkout@v3
+           - uses: actions/setup-node@v4
+             with:
+                node-version: ${{ matrix.version }}
+                    
+           - name: Cache node modules
+             uses: actions/cache@v4
+             id: npm_cache_id
+             with:
+                path: node_modules
+                key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
+                restore-keys: |
+                    ${{ runner.os }}-npm-cache-
+                    ${{ runner.os }}-
+
+           - name: Install dependencies
+             if: steps.npm_cache_id.outputs.cache-hit != true
+             run: npm install 
+
+           - name: Install Dependencies
+             run: npm install
+     
+           - name: Code Analysis
+             id: lint-test
+             continue-on-error: true
+             run: |
+               npm run lint > lint_output.txt 2>&1
+               exitCode=$?
+               lintErrors=$(grep -iE "problems" lint_output.txt || true)
+               echo "lintErrors=$lintErrors" >> $GITHUB_OUTPUT
+               exit $exitCode
+     
+           - name: Output Linting Results
+             run: |
+               echo "Linting Errors: ${{ steps.lint-test.outputs.lintErrors }}"
+
+          #  - name: Dependency Vulnerability Check
+          #    id: dependency-vulnerability
+          #    continue-on-error: true
+          #    shell: bash
+          #    run: |
+          #       temp=$(bash -c 'npm audit --audit-level=critical --dry-run; exit $?' > out_2.txt 2>&1) exitCode=$? || true
+          #       output=$( grep -iE "vulnerabilities" ./out_2.txt )
+          #       echo "vulnerabilities=$(echo $output)" >> $GITHUB_OUTPUT
+          #       exit $exitCode
+        
+       
