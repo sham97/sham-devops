@@ -7,7 +7,7 @@ on:
 env:
   RESUME_DOCKER_HUB : ${{vars.RESUME_REPO}}
 jobs: 
-    build-application:
+    build-application: 
         runs-on: ubuntu-latest
         strategy:
             matrix:
@@ -86,3 +86,20 @@ jobs:
                   docker push $RESUME_DOCKER_HUB:$IMAGE_VERSION
                   docker tag $RESUME_DOCKER_HUB:$IMAGE_VERSION $RESUME_DOCKER_HUB:latest
                   docker push $RESUME_DOCKER_HUB:latest
+
+    deploy-application:
+          # Add a dependency to the build job
+          needs: build-application
+          # Specify runner + deployment step
+          runs-on: ubuntu-latest
+          steps:
+            - name: Download artifact
+              uses: actions/download-artifact@v3
+              with:
+                name: production-files
+                path: ./dist
+            - name: Deploy to GitHub Pages
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                github_token: ${{ secrets.ACCESS_TOKEN }}
+                publish_dir: ./dist
