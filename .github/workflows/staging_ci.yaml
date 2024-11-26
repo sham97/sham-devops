@@ -83,10 +83,6 @@ jobs:
                 IMAGE_VERSION: ${{steps.date.outputs.builddate}}
              run : |
                   docker build -f Dockerfile -t sham-devops:$IMAGE_VERSION .
-
-
-           - name: Push to Docker Hub Repository
-             run : |
                   docker push $RESUME_DOCKER_HUB:$IMAGE_VERSION
                   docker tag $RESUME_DOCKER_HUB:$IMAGE_VERSION $RESUME_DOCKER_HUB:latest
                   docker push $RESUME_DOCKER_HUB:latest
