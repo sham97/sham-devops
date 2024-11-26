@@ -53,6 +53,9 @@ jobs:
     # Specify runner + deployment step
     runs-on: ubuntu-latest
     steps:
+      - name: Copy app.js
+        run: cp ./app.js ./dist/
+    
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
